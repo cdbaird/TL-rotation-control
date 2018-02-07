@@ -23,7 +23,7 @@ def find_ports():
 
 
 
-def response_parse(response):
+def parse_response(response):
 	pass
 		 
 

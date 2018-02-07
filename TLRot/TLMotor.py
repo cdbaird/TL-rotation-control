@@ -2,7 +2,7 @@ import serial as s
 from .cmd import cmd
 
 
-class RotStage():
+class Motor():
 
 	def __init__(self, port, baud=9600, bytesize=8, parity='N'):
 		try:
@@ -13,7 +13,7 @@ class RotStage():
 
 		if self.motor.is_open:
 			self.get_motor_info()
-			self.status = self.get_status()
+			self.get_status()
 
 ## Get parameters
 
@@ -36,10 +36,9 @@ class RotStage():
 	def set_step_size(self, msg):
 		self.status = self.send_command(cmd['set_step'], msg)
 	
-## Move
+## Move stage
 
-	def home(self, msg=b'0'): # 0 for CW, 1 for ACW
-		# instruction = b'ho'		 
+	def home(self, msg=b'0'): # 0 for CW, 1 for ACW		 
 		self.status = self.send_command(cmd['home'], msg)
 
 	def fw_jog(self):
@@ -47,6 +46,18 @@ class RotStage():
 
 	def bw_jog(self):
 		self.status = self.send_command(cmd['backward'])
+
+	def move_abs(self, msg=None):
+		if not msg:
+			raise IOError('move_abs requires a value!')
+
+		self.status = self.send_command(cmd['move_abs'], msg)
+
+	def move_rel(self, msg=None):
+		if not msg:
+			raise IOError('move_rel requires a value!')
+
+		self.status = self.send_command(cmd['move_rel'], msg)
 
 	
 

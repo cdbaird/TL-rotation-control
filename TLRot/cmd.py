@@ -2,16 +2,19 @@
 cmd = {
 	'get_info' : b'in',
 	'get_status' : b'gs',
-	'home' : b'ho',
 	'get_pos': b'po',
+	'get_step' : b'gj',
+	'set_step' : b'sj',
+	'home' : b'ho',
 	'forward' : b'fw',
 	'backward' : b'bw',
-	'get_step' : b'gj',
-	'set_step' : b'sj'
+	'move_abs' : b'ma',
+	'move_rel' : b'mr'
+
 	}
 
 
-def get_command_d():
+def commands():
 	return cmd
 
 if __name__ == '__main__':
