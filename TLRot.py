@@ -38,17 +38,23 @@ class TLMotor():
 		# instruction = cmd['info']
 		self.info = self.send_command(cmd['info'])
 
-	def home(self, data=b'0'): # 0 for CW, 1 for ACW
+	def home(self, msg=b'0'): # 0 for CW, 1 for ACW
 		# instruction = b'ho'		 
-		self.status = self.send_command(cmd['home'], data)
+		self.status = self.send_command(cmd['home'], msg)
 
 	def fw_jog(self):
 		self.status = self.send_command(cmd['forward'])
 
-	def send_command(self, instruction, data=None, address=b'0'):
+	def get_step_size(self):
+		self.status = self.send_command(cmd['get_step'])
+
+	def set_step_size(self, msg):
+		self.status = self.send_command(cmd['set_step'], msg)
+
+	def send_command(self, instruction, msg=None, address=b'0'):
 		command = address + instruction
-		if data:
-			command += data
+		if msg:
+			command += msg
 		#print(command)
 		self.motor.write(command)
 		response = self.motor.read_until(terminator=b'\n')
@@ -64,10 +70,13 @@ def response_parse(response):
 def main():
 	ports = find_ports()
 	mot1 = TLMotor(ports[1])
-	print(mot1.info)
-	mot1.home()
+	#print(mot1.info)
+	#mot1.home()
+	#print(mot1.status)
+	#mot1.get_step_size()
+	#print(mot1.status)
 	#mot1.fw_jog()
-	print(mot1.status)
+	#print(mot1.status)
 
 
 
