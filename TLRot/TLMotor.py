@@ -72,3 +72,6 @@ class Motor():
 		self.motor.write(command)
 		response = self.motor.read_until(terminator=b'\n')
 		return response
+
+	def __str__(self):
+		return TLhelper.parse(self.info)
