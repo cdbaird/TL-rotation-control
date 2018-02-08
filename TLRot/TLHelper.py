@@ -29,12 +29,12 @@ def parse(msg):
 	msg = msg.decode()
 	code = get_msg_code(msg)
 	try: 
-		addr = (int(msg[0], 16))
+		addr = int(msg[0], 16)
 	except ValueError:
 		raise ValueError('Invalid Address: %s' % msg[0])
 
 	if (code.upper() == 'IN'):
-		info = {'Address' : addr,
+		info = {'Address' : str(addr),
 			'Motor Type' : msg[3:5],
 			'Serial No.' : msg[5:13],
 			'Year' : msg[13:17],
@@ -42,7 +42,7 @@ def parse(msg):
 			'Thread' : is_metric(msg[19]),
 			'Hardware' : msg[20],
 			'Range' : str(int(msg[21:25], 16)),
-			'Pulse/Rev' : int(msg[25:], 16) }
+			'Pulse/Rev' : str(int(msg[25:], 16)) }
 		return info
 
 

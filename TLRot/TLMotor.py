@@ -1,13 +1,13 @@
 import serial as s
 from .cmd import cmd
-
+from .TLHelper import parse
 
 class Motor():
 
 	def __init__(self, port, baud=9600, bytesize=8, parity='N'):
 		try:
 			self.motor = s.Serial(port, baud, bytesize, parity)
-
+			self.port = port
 		except s.SerialException:
 			print('Could not open port %s' % port)
 
@@ -59,9 +59,7 @@ class Motor():
 
 		self.status = self.send_command(cmd['move_rel'], msg)
 
-	
 
-	
 ## Private methods
 
 	def send_command(self, instruction, msg=None, address=b'0'):
@@ -74,4 +72,21 @@ class Motor():
 		return response
 
 	def __str__(self):
-		return TLhelper.parse(self.info)
+		string = ''
+		d = parse(self.info)
+		for key in d:
+			string += (key + ' - ' + d[key] + '\n')
+
+		if (string == ''):
+			string = 'No Data'
+
+		return string
+
+
+
+
+
+
+
+
+
