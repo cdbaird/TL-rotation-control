@@ -2,6 +2,8 @@ import serial as s
 import serial.tools.list_ports as lp
 import sys
 
+from .errcodes import error_codes
+
 
 # Some helper functions for TLRot module
 
@@ -26,8 +28,8 @@ def find_ports():
 def parse(msg):
 	if not msg.endswith(b'\r\n'):
 		print('Status/Response may be incomplete!')
-	msg = msg.decode()
-	code = get_msg_code(msg)
+	msg = msg.decode().strip()
+	code = msg[1:3]
 	try: 
 		addr = int(msg[0], 16)
 	except ValueError:
@@ -41,25 +43,47 @@ def parse(msg):
 			'Firmware' : msg[17:19],
 			'Thread' : is_metric(msg[19]),
 			'Hardware' : msg[20],
-			'Range' : str(int(msg[21:25], 16)),
-			'Pulse/Rev' : str(int(msg[25:], 16)) }
+			'Range' : (int(msg[21:25], 16)),
+			'Pulse/Rev' : (int(msg[25:], 16)) }
 		return info
 
+	elif (code.upper() == 'PO'):
+		pos = msg[3:]
+		return (code, (s32(int(pos, 16))))
 
+	elif (code.upper() == 'GS'):
+		errcode = msg[3:]
+		return (code, int(errcode, 16))
 
 def get_msg_code(msg):
-	code = [c for c in msg.strip() if not c.isdigit()]
+	code = [c for c in msg if not c.isdigit()]
 	return ''.join(code)
 
 def is_metric(num):
 	if (num == '0'):
-		thread = 'Metric'
+		thread_type = 'Metric'
 	elif(num == '1'):
-		thread = 'Imperial'
+		thread_type = 'Imperial'
 	else:
-		thread = None
+		thread_type = None
 
-	return thread		 
+	return thread_type
+
+def s32(value): # Convert 32bit signed hex to int
+	return -(value & 0x80000000) | (value & 0x7fffffff)
+
+def error_check(status):
+	if not status:
+		print('Status is None')
+	elif ((status[0] == "GS") and (status[1] != 0)): # is there an error?		
+		err = error_codes[status[1]]
+		print('ERROR: %s' % err)
+	elif (status[0] == "PO"):
+		print("Move complete")
+
+
+
+
 
 
 

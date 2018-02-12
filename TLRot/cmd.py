@@ -2,7 +2,7 @@
 cmd = {
 	'get_info' : b'in',
 	'get_status' : b'gs',
-	'get_pos': b'po',
+	'get_pos': b'gp',
 	'get_step' : b'gj',
 	'set_step' : b'sj',
 	'home' : b'ho',
