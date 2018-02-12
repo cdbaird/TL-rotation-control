@@ -55,7 +55,10 @@ def parse(msg):
 		errcode = msg[3:]
 		return (code, int(errcode, 16))
 
+
+## Fails if message contains hex digit > 9 after code, e.g. '0POFFFFFFFD'. Deprecated
 def get_msg_code(msg):
+	print('WARNING: get_msg_code does not work correctly. Don\'t use it!')
 	code = [c for c in msg if not c.isdigit()]
 	return ''.join(code)
 
