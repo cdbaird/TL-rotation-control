@@ -18,7 +18,7 @@ def main():
 	# print(mot1.status)
 	# print(mot1.position)
 	# print('Homing...')
-	#mot1.home()
+	# mot1.home()
 	mot1.fstep()
 	# print(mot1.status)
 	# print('Moving...')

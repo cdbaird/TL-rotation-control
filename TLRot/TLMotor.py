@@ -97,6 +97,13 @@ class Motor():
 		self.get_position()
 		print(self.position_deg)
 
+	def custom_command(self, target, *args):
+		error_check(self.status)
+		target(*args)
+		error_check(self.status)
+		self.get_position()
+		print(self.position_deg)		
+
 
 	
 

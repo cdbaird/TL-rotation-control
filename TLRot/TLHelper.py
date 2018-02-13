@@ -53,7 +53,7 @@ def parse(msg):
 
 	elif (code.upper() == 'GS'):
 		errcode = msg[3:]
-		return (code, int(errcode, 16))
+		return (code, str(int(errcode, 16)))
 
 
 ## Fails if message contains hex digit > 9 after code, e.g. '0POFFFFFFFD'. Deprecated
@@ -78,7 +78,7 @@ def s32(value): # Convert 32bit signed hex to int
 def error_check(status):
 	if not status:
 		print('Status is None')
-	elif ((status[0] == "GS") and (status[1] != 0)): # is there an error?		
+	elif ((status[0] == "GS") and (status[1] != '0')): # is there an error?		
 		err = error_codes[status[1]]
 		print('ERROR: %s' % err)
 	elif (status[0] == "PO"):
