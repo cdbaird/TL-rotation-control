@@ -1,6 +1,6 @@
 import serial as s
 from .cmd import cmd
-from .TLHelper import parse, error_check
+from .helper import parse, error_check
 
 class Motor():
 

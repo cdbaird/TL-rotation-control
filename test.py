@@ -1,4 +1,4 @@
-import TLRot
+import elliptec
 
 def revolve360(motor, revs=1):
 	motor.get_step_size()
@@ -12,8 +12,8 @@ def revolve360(motor, revs=1):
 
 
 def main():
-	ports = TLRot.find_ports()
-	mot1 = TLRot.Motor(ports[1])
+	ports = elliptec.find_ports()
+	mot1 = elliptec.Motor(ports[1])
 	# print(mot1)
 	# print(mot1.status)
 	# print(mot1.position)

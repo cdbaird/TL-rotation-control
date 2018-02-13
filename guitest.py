@@ -3,7 +3,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
-import TLRot
+import elliptec
  
 class App(QMainWindow):
  
