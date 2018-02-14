@@ -7,21 +7,16 @@ from .errcodes import error_codes
 # Some helper functions for TLRot module
 
 def find_ports():
-	if sys.platform.startswith('darwin'):
-		ports = [comport.device for comport in lp.comports()]
-		# print(ports)
-	else:
-		raise OSError('Not Implemented for this OS: %s' % sys.platform)
-	
-	avail_ports = []	
-	for port in ports:
-		try:
-			p = s.Serial(port)
-			p.close()
-			avail_ports.append(port)
-		except (OSError, s.SerialException):
-			pass
-
+	avail_ports = []
+	for port in lp.comports():
+		if port.serial_number:
+			try:
+				p = s.Serial(port.device)
+				p.close()
+				avail_ports.append(port)
+			except (OSError, s.SerialException):
+				print('%s unavailable.\n')
+				#pass
 	return avail_ports
 
 def parse(msg):
@@ -53,6 +48,9 @@ def parse(msg):
 	elif (code.upper() == 'GS'):
 		errcode = msg[3:]
 		return (code, str(int(errcode, 16)))
+
+	else:
+		return (code, msg[3:])
 
 
 ## Fails if message contains hex digit > 9 after code, e.g. '0POFFFFFFFD'. Deprecated

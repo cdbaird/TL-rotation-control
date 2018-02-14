@@ -1,22 +1,37 @@
 import serial as s
 from .cmd import cmd
 from .helper import parse, error_check
+import sys
 
-class Motor():
+class Motor(s.Serial):
 
 	def __init__(self, port, baud=9600, bytesize=8, parity='N'):
 		try:
-			self.motor = s.Serial(port, baud, bytesize, parity)
-			
+			#self.motor = s.Serial(port, baud, bytesize, parity)
+			super().__init__(port, baud, bytesize, parity, timeout=2)
 		except s.SerialException:
 			print('Could not open port %s' % port)
+			sys.exit()
 
-		if self.motor.is_open:
+		if self.is_open:
 			self.port = port
 			self.get_motor_info()
 			self.conv_factor = float(self.info['Range'])/float(self.info['Pulse/Rev'])
 			self.get_status()
 			self.get_position()
+
+	def do(self, req='get_status', data=None, addr=b'0'):
+		try:
+			instruction = cmd[req]
+		except KeyError:
+			print('Invalid Command')
+		command = addr + instruction
+		if data:
+			command += data.encode('utf-8')
+
+		self.write(command)
+		response = self.read_until(terminator=b'\n')
+		self.status = parse(response)	
 
 ## Get parameters
 
@@ -70,8 +85,8 @@ class Motor():
 		if msg:
 			command += msg
 		#print(command)
-		self.motor.write(command)
-		response = self.motor.read_until(terminator=b'\n')
+		self.write(command)
+		response = self.read_until(terminator=b'\n')
 		#print(response)
 		return parse(response)
 
@@ -91,18 +106,16 @@ class Motor():
 		print(self.position_deg)
 
 	def fstep(self):
+		print(self.status)
 		error_check(self.status)
 		self.mv_fstep()
+		print(self.status)
 		error_check(self.status)
 		self.get_position()
 		print(self.position_deg)
 
-	def custom_command(self, target, *args):
-		error_check(self.status)
-		target(*args)
-		error_check(self.status)
-		self.get_position()
-		print(self.position_deg)		
+	
+
 
 
 	
