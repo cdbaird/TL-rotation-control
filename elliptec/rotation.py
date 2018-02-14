@@ -1,82 +1,77 @@
 import serial as s
-from .cmd import cmd
-from .helper import parse, error_check
+from .cmd import get_, set_, mov_
+from .helper import parse, error_check, move_check
 import sys
+
 
 class Motor(s.Serial):
 
-	def __init__(self, port, baud=9600, bytesize=8, parity='N'):
+	def __init__(self, port, baud=9600, bytesize=8, parity='N', timeout=2):
 		try:
 			#self.motor = s.Serial(port, baud, bytesize, parity)
-			super().__init__(port, baud, bytesize, parity, timeout=2)
+			super().__init__(port, baud, bytesize, parity, timeout)
 		except s.SerialException:
 			print('Could not open port %s' % port)
 			sys.exit()
 
 		if self.is_open:
-			self.port = port
-			self.get_motor_info()
+			#self.port = port
+			self._get_motor_info()
 			self.conv_factor = float(self.info['Range'])/float(self.info['Pulse/Rev'])
-			self.get_status()
-			self.get_position()
+			self.get_('status')
+			self.get_('position')
 
-	def do(self, req='get_status', data=None, addr=b'0'):
+	def do_(self, req='home', data='0', addr='0'):
 		try:
-			instruction = cmd[req]
+			instruction = mov_[req]
+		except KeyError:
+			print('Invalid Command: %s' % req)
+		else:
+			command = addr.encode('utf-8') + instruction
+			if data:
+				command += data.encode('utf-8')
+
+			self.request = command
+			self.write(command)
+			self.response = self.read_until(terminator=b'\n')
+			self.status = parse(self.response)
+			move_check(self.status)
+
+	def set_(self, req='', data='', addr='0'):
+		try:
+			instruction = set_[req]
 		except KeyError:
 			print('Invalid Command')
-		command = addr + instruction
-		if data:
-			command += data.encode('utf-8')
+		else:
+			command = addr.encode('utf-8') + instruction
+			if data:
+				command += data.encode('utf-8')
 
-		self.write(command)
-		response = self.read_until(terminator=b'\n')
-		self.status = parse(response)	
+			self.write(command)
+			response = self.read_until(terminator=b'\n')
+			self.status = parse(response)
+			error_check(self.status)
+
+	def get_(self, req='status', data='', addr='0'):
+		try:
+			instruction = get_[req]
+		except KeyError:
+			print('Invalid Command')
+		else:
+			command = addr.encode('utf-8') + instruction
+			if data:
+				command += data.encode('utf-8')
+
+			self.write(command)
+			response = self.read_until(terminator=b'\n')
+			self.status = parse(response)
+			error_check(self.status)
 
 ## Get parameters
 
-	def get_motor_info(self):
+	def _get_motor_info(self):
 		# instruction = cmd['info']
-		self.info = self.send_command(cmd['get_info'])
-		
-	def get_status(self):
-		self.status = self.send_command(cmd['get_status'])
-
-	def get_step_size(self):
-		self.status = self.send_command(cmd['get_step'])
-
-	def get_position(self):
-		self.position = self.send_command(cmd['get_pos'])[1] # Shouldn't need message code 
-		self.position_deg = self.position * self.conv_factor
-
-## Set parameters
-
-	def set_step_size(self, msg):
-		self.status = self.send_command(cmd['set_step'], msg)
-	
-## Move stage
-
-	def mv_home(self, msg=b'0'): # 0 for CW, 1 for ACW		 
-		self.status = self.send_command(cmd['home'], msg)
-
-	def mv_fstep(self):
-		self.status = self.send_command(cmd['forward'])
-
-	def mv_bstep(self):
-		self.status = self.send_command(cmd['backward'])
-
-	def mv_abs(self, msg=None):
-		if not msg:
-			raise IOError('move_abs requires a value!')
-
-		self.status = self.send_command(cmd['move_abs'], msg)
-
-	def mv_rel(self, msg=None):
-		if not msg:
-			raise IOError('move_rel requires a value!')
-
-		self.status = self.send_command(cmd['move_rel'], msg)
-
+		self.info = self.send_command(get_['info'])
 
 ## Private methods
 

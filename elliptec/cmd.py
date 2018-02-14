@@ -1,16 +1,21 @@
 
-cmd = {
-	'get_info' : b'in',
-	'get_status' : b'gs',
-	'get_pos': b'gp',
-	'get_step' : b'gj',
-	'set_step' : b'sj',
+get_ = {
+	'info' : b'in',
+	'status' : b'gs',
+	'position': b'gp',
+	'stepsize' : b'gj'
+	}
+
+set_ = {
+	'stepsize' : b'sj'
+	}
+
+mov_ = {
 	'home' : b'ho',
 	'forward' : b'fw',
 	'backward' : b'bw',
-	'move_abs' : b'ma',
-	'move_rel' : b'mr'
-
+	'absolute' : b'ma',
+	'relative' : b'mr'
 	}
 
 

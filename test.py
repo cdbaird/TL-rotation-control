@@ -13,21 +13,13 @@ def revolve360(motor, revs=1):
 
 def main():
 	ports = elliptec.find_ports()
-	mot1 = elliptec.Motor(ports[1])
-	# print(mot1)
-	# print(mot1.status)
-	# print(mot1.position)
-	# print('Homing...')
-	# mot1.home()
-	mot1.fstep()
-	# print(mot1.status)
-	# print('Moving...')
-	# mot1.move_rel(b'00000010')
-	# print(mot1.status)
-	# print('Homing...')
-	# mot1.home()
-	# print(mot1.status)
-	# revolve360(mot1, 2)
+	print([p.device for p in ports])
+	mot1 = elliptec.Motor(ports[0][0])
+	mot1.do_('home', '0')
+	mot1.get_('status')
+	print(mot1.status[1])
+
+
 
 if __name__ == '__main__':
 	main()

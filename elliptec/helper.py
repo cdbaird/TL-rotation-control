@@ -41,7 +41,7 @@ def parse(msg):
 			'Pulse/Rev' : (int(msg[25:], 16)) }
 		return info
 
-	elif (code.upper() == 'PO'):
+	elif ((code.upper() == 'PO') or code.upper() == 'BO'):
 		pos = msg[3:]
 		return (code, (s32(int(pos, 16))))
 
@@ -78,8 +78,31 @@ def error_check(status):
 	elif ((status[0] == "GS") and (status[1] != '0')): # is there an error?		
 		err = error_codes[status[1]]
 		print('ERROR: %s' % err)
-	elif (status[0] == "PO"):
-		print("Move complete")
+
+def move_check(status):
+	if not status:
+		print('Status is None')
+	elif ((status[0] == "PO") or (status[0] == "BO")):
+		print('Move Successful')
+	elif status[0] == 'GS':
+		error_check(status)
+	else:
+		print('Unknown response code %s' % status[0])
+
+class Parser():
+	def __init__(self, request, response):
+		if ((request is None) or (response is None)):
+			raise ValueError('Parser input cannot be empty!')
+
+		self.request = self.parse(request)
+		self.response = self.parse(response)
+
+	def parse(self, msg):
+		msg = msg.decode().strip()
+		addr = msg[0]
+		code = msg[1:3]
+		data = msg[3:]
+		return (addr, code, data)
 
 
 
@@ -87,12 +110,15 @@ def error_check(status):
 
 
 
-def main():
-	test_msg = b'0IN081080004120170701016800040000\r\n'
-	print(parse(test_msg))
+def test():
+	test_request = b'0in'
+	test_response = b'0IN081080004120170701016800040000\r\n'
+	parser = Parser(test_request, test_response)
+	print(parser.request)
+	print(parser.response)
 
 
 
 
 if __name__ =='__main__':
-	main()
+	test()
