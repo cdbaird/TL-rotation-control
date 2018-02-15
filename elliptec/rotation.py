@@ -10,7 +10,7 @@ class Motor(serial.Serial):
 	def __init__(self, port, baudrate=9600, bytesize=8, parity='N', timeout=2):
 		try:
 			#self.motor = s.Serial(port, baud, bytesize, parity)
-			super().__init__(port, baudrate, bytesize, parity, timeout)
+			super().__init__(port, baudrate=9600, bytesize=8, parity='N', timeout=2)
 		except serial.SerialException:
 			print('Could not open port %s' % port)
 			sys.exit()
@@ -52,9 +52,12 @@ class Motor(serial.Serial):
 				command += data.encode('utf-8')
 
 			self.write(command)
+			#print(command)
 			response = self.read_until(terminator=b'\n')
-			self.status = parse(response)
-			error_check(self.status)
+			#print(response)
+			# self.status = parse(response)
+			return command
+			#error_check(self.status)
 
 	def get_(self, req='status', data='', addr='0'):
 		try:
@@ -67,14 +70,17 @@ class Motor(serial.Serial):
 				command += data.encode('utf-8')
 
 			self.write(command)
+			#print(command)
 			response = self.read_until(terminator=b'\n')
+			print(response)
 			self.status = parse(response)
 			error_check(self.status)
+			return response
 
 	def deg_to_hex(self, deg):
 		factor = self.counts_per_rev//self.range
 		val = hex(deg*factor)
-		return val.replace('0x', '').zfill(8)
+		return val.replace('0x', '').zfill(8).upper()
 
 
 

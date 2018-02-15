@@ -21,8 +21,9 @@ def find_ports():
 	return avail_ports
 
 def parse(msg):
-	if not msg.endswith(b'\r\n'):
+	if (not msg.endswith(b'\r\n') or (len(msg) == 0)):
 		print('Status/Response may be incomplete!')
+		return None
 	msg = msg.decode().strip()
 	code = msg[1:3]
 	try: 
@@ -86,10 +87,10 @@ def error_check(status):
 def move_check(status):
 	if not status:
 		print('Status is None')
-	elif ((status[0] == "PO") or (status[0] == "BO")):
-		print('Move Successful')
 	elif status[0] == 'GS':
 		error_check(status)
+	elif ((status[0] == "PO") or (status[0] == "BO")):
+		print('Move Successful')
 	else:
 		print('Unknown response code %s' % status[0])
 

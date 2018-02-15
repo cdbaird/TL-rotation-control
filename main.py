@@ -11,6 +11,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.btnForward.clicked.connect(self.forward)
 		self.btnBackward.clicked.connect(self.backward)
 		self.verticalSlider.valueChanged.connect(self.on_slider_drag)
+		self.verticalSlider.sliderReleased.connect(self.on_slider_release)
 
 	def forward(self):
 		self.mot1.do_('forward')
@@ -21,10 +22,14 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 	def on_slider_drag(self):
 		val = self.verticalSlider.value()
 		self.spinBox.setValue(val)
+		#self.mot1.set_('stepsize', self.mot1.deg_to_hex(val))
 
 	def on_slider_release(self):
 		val = self.verticalSlider.value()
-		self.mot1.set_('stepsize', str(hex(val*262144//360)))
+		cmd_val = self.mot1.deg_to_hex(val)
+		#print(cmd_val)
+		self.mot1.set_('stepsize', self.mot1.deg_to_hex(val))
+		self.mot1.get_('stepsize')
 
 
 
