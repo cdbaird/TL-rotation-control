@@ -20,7 +20,7 @@ mov_ = {
 
 
 def commands():
-	return cmd
+	return [get_, set_, mov_]
 
 if __name__ == '__main__':
 	keys = cmd.keys()

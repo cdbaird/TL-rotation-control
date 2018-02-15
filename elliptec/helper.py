@@ -10,12 +10,13 @@ def find_ports():
 	avail_ports = []
 	for port in lp.comports():
 		if port.serial_number:
+			print(port.serial_number)
 			try:
 				p = s.Serial(port.device)
 				p.close()
-				avail_ports.append(port)
+				avail_ports.append(port.device)
 			except (OSError, s.SerialException):
-				print('%s unavailable.\n')
+				print('%s unavailable.\n' % port.device)
 				#pass
 	return avail_ports
 
@@ -75,9 +76,12 @@ def s32(value): # Convert 32bit signed hex to int
 def error_check(status):
 	if not status:
 		print('Status is None')
-	elif ((status[0] == "GS") and (status[1] != '0')): # is there an error?		
-		err = error_codes[status[1]]
-		print('ERROR: %s' % err)
+	elif (status[0] == "GS"):
+		if (status[1] != '0'): # is there an error?		
+			err = error_codes[status[1]]
+			print('ERROR: %s' % err)
+		else:
+			print('Status OK')
 
 def move_check(status):
 	if not status:
