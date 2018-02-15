@@ -55,9 +55,8 @@ class Motor(serial.Serial):
 			#print(command)
 			response = self.read_until(terminator=b'\n')
 			#print(response)
-			# self.status = parse(response)
-			return command
-			#error_check(self.status)
+			self.status = parse(response)
+			error_check(self.status)
 
 	def get_(self, req='status', data='', addr='0'):
 		try:
@@ -75,13 +74,16 @@ class Motor(serial.Serial):
 			print(response)
 			self.status = parse(response)
 			error_check(self.status)
-			return response
 
 	def deg_to_hex(self, deg):
 		factor = self.counts_per_rev//self.range
 		val = hex(deg*factor)
 		return val.replace('0x', '').zfill(8).upper()
 
+	def hex_to_deg(self, hexval):
+		factor = self.counts_per_rev//self.range
+		val = round(int(val,16)/factor)
+		return val
 
 
 ## Private methods
