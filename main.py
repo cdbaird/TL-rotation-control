@@ -2,13 +2,13 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from td_gui import Ui_TapeDriveWindow
 
 import elliptec.tapedrive as td
+import elliptec
 
 class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 	def __init__(self):
 		super().__init__()
 		self.setupUi(self)
 		self.tapedrive = td.Tapedrive()
-		
 		# Set default stepsize
 		self.tapedrive.motor1.set_('stepsize', 
 			self.tapedrive.motor1.deg_to_hex(self.verticalSlider.value()))
