@@ -1,8 +1,8 @@
 import sys
 import serial
 
-from dicts import commands, responses
-from helper import is_valid_hex
+from .dicts import commands, responses
+from .helper import is_valid_hex
 
 
 class Motor(serial.Serial):
@@ -71,7 +71,7 @@ class Response():
 		self.velocity = None
 
 		self._handle()
-		self._fill_values()
+		# self._fill_values()
 
 	def _handle(self):
 		if not self.rsp.endswith(b'\r\n'):
@@ -80,6 +80,7 @@ class Response():
 		code = self.rsp[1:3]
 		data = self.rsp[3:]
 		if self.req == code:
+			pass
 
 
 
@@ -90,7 +91,6 @@ class Response():
 
 if __name__ == '__main__':
 	from helper import find_ports
-
 	ports = find_ports()
 	mot = Motor(ports[-1])
 	cmd = Command('backward')

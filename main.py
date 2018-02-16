@@ -10,14 +10,21 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.mot1 = elliptec.Motor(port)
 		self.btnForward.clicked.connect(self.forward)
 		self.btnBackward.clicked.connect(self.backward)
+		self.btnHome_2.clicked.connect(self.home)
 		self.verticalSlider.valueChanged.connect(self.on_slider_drag)
 		self.verticalSlider.sliderReleased.connect(self.on_slider_release)
 
 	def forward(self):
-		self.mot1.do_('forward')
+		cmd = Command('forward')
+		self.mot1.do(cmd)
 
 	def backward(self):
-		self.mot1.do_('backward')
+		cmd = Command('backward')
+		self.mot1.do(cmd)
+
+	def home(self):
+		cmd = Command('home', data='0')
+		self.mot1.do(cmd)
 
 	def on_slider_drag(self):
 		val = self.verticalSlider.value()
@@ -35,6 +42,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 
 if __name__ == '__main__':
 	import sys
+	from elliptec.motor import Motor, Command
 	app = QtWidgets.QApplication(sys.argv)
 	ports = elliptec.find_ports()
 

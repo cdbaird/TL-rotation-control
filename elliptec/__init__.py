@@ -1,3 +1,3 @@
-from .cmd import commands
-from .rotation import Motor
+from .dicts import commands
+from .motor import Motor, Command, Response
 from .helper import *
