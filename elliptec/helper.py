@@ -14,7 +14,7 @@ def find_ports():
 			try:
 				p = s.Serial(port.device)
 				p.close()
-				avail_ports.append(port.device)
+				avail_ports.append(port)
 			except (OSError, s.SerialException):
 				print('%s unavailable.\n' % port.device)
 				#pass
