@@ -10,7 +10,7 @@ def find_ports():
 	avail_ports = []
 	for port in lp.comports():
 		if port.serial_number:
-			print(port.serial_number)
+			#print(port.serial_number)
 			try:
 				p = s.Serial(port.device)
 				p.close()

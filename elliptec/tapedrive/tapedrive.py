@@ -39,10 +39,13 @@ class Tapedrive():
 		ports = find_ports()
 		if (len(ports) < 2):
 			raise IOError('Tapedrive needs 2 motors, %s found' % str(len(ports)))
+		for port in ports:
+			if port.serial_number == self.sn_mot1:
+				self.motor1 = Motor(port.device)
+			elif port.serial_number == self.sn_mot2:
+				self.motor2 = Motor(port.device)
 		
-		self.motor1 = Motor(ports[0])
-		self.motor2 = Motor(ports[1])
-
+		
 
 
 

@@ -1,23 +1,56 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from td_gui import Ui_TapeDriveWindow
 
-import elliptec
+import elliptec.tapedrive as td
 
 class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
-	def __init__(self, port):
+	def __init__(self):
 		super().__init__()
 		self.setupUi(self)
-		self.mot1 = elliptec.Motor(port)
+		self.tapedrive = td.Tapedrive()
+		
+		# Set default stepsize
+		self.tapedrive.motor1.set_('stepsize', 
+			self.tapedrive.motor1.deg_to_hex(self.verticalSlider.value()))
+		self.tapedrive.motor2.set_('stepsize', 
+			self.tapedrive.motor2.deg_to_hex(self.verticalSlider.value()))
+
 		self.btnForward.clicked.connect(self.forward)
 		self.btnBackward.clicked.connect(self.backward)
+		self.btnHome.clicked.connect(self.home)
+		self.btnM2bw.clicked.connect(self.mot2_bw)
+		self.btnM2fw.clicked.connect(self.mot2_fw)
+		self.btnM1bw.clicked.connect(self.mot1_bw)
+		self.btnM1fw.clicked.connect(self.mot1_fw)
+
 		self.verticalSlider.valueChanged.connect(self.on_slider_drag)
 		self.verticalSlider.sliderReleased.connect(self.on_slider_release)
+		self.homeEnable.toggled.connect(self.home_button_toggle)
+
+	def mot2_bw(self):
+		self.tapedrive.motor2.do_('backward')
+
+	def mot2_fw(self):
+		self.tapedrive.motor2.do_('forward')
+
+	def mot1_bw(self):
+		self.tapedrive.motor1.do_('backward')
+
+	def mot1_fw(self):
+		self.tapedrive.motor1.do_('forward')
 
 	def forward(self):
-		self.mot1.do_('forward')
+		self.tapedrive.motor1.do_('forward')
+		self.tapedrive.motor2.do_('forward')
 
 	def backward(self):
-		self.mot1.do_('backward')
+		self.tapedrive.motor1.do_('backward')
+		self.tapedrive.motor2.do_('backward')
+
+	def home(self):
+		self.tapedrive.motor1.do_('home')
+		self.tapedrive.motor2.do_('home')
+
 
 	def on_slider_drag(self):
 		val = self.verticalSlider.value()
@@ -26,19 +59,22 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 
 	def on_slider_release(self):
 		val = self.verticalSlider.value()
-		cmd_val = self.mot1.deg_to_hex(val)
+		cmd_val = self.tapedrive.motor1.deg_to_hex(val)
 		#print(cmd_val)
-		self.mot1.set_('stepsize', self.mot1.deg_to_hex(val))
-		self.mot1.get_('stepsize')
+		self.tapedrive.motor1.set_('stepsize', self.tapedrive.motor1.deg_to_hex(val))
+		self.tapedrive.motor1.get_('stepsize')
+		self.tapedrive.motor2.set_('stepsize', self.tapedrive.motor1.deg_to_hex(val))
+		self.tapedrive.motor2.get_('stepsize')
 
+	def home_button_toggle(self):
+		self.btnHome.setEnabled(self.homeEnable.isChecked())
+		
 
 
 if __name__ == '__main__':
 	import sys
 	app = QtWidgets.QApplication(sys.argv)
-	ports = elliptec.find_ports()
-
-	tdgui = mainProgram(ports[0])
+	tdgui = mainProgram()
 	tdgui.show()
 	sys.exit(app.exec_())
 
