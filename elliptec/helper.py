@@ -1,7 +1,7 @@
 import serial as s
 import serial.tools.list_ports as lp
 import sys
-from .errcodes import error_codes
+#from .errcodes import error_codes
 
 
 # Some helper functions for TLRot module
@@ -93,6 +93,20 @@ def move_check(status):
 		print('Move Successful')
 	else:
 		print('Unknown response code %s' % status[0])
+
+def is_valid_hex(value):
+	is_valid = False
+	try:
+		d = int(value,16)
+	except ValueError:
+		pass
+	else:
+		if (len(value) <= 8) or ('0x' in value):
+			pass
+		else:
+			is_valid = True
+	finally:
+		return is_valid
 
 class Parser():
 	def __init__(self, request, response):
