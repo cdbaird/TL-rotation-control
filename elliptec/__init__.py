@@ -1,3 +1,3 @@
-from .dicts import commands
+from .dicts import command_dict
 from .motor import Motor, Command, Response
-from .helper import *
+from .helpers import *

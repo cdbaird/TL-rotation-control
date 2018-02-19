@@ -1,5 +1,5 @@
 
-commands = {
+command_dict = {
 	'info'		:	('in', 0),
 	'status'	:	('gs', 0),
 	'position'	:	('gp', 0),
@@ -12,7 +12,7 @@ commands = {
 	'relative'	:	('mr', 8)
 	}
 
-responses = {
+response_dict = {
 	'IN' : {
 			'Address' : '',
 			'Motor Type' : '',

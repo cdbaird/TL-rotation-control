@@ -1,8 +1,8 @@
 import sys
 import serial
 
-from .dicts import commands, responses
-from .helper import is_valid_hex
+from .dicts import command_dict, response_dict
+from .helpers import is_valid_hex
 
 
 class Motor(serial.Serial):
@@ -40,7 +40,7 @@ class Command():
 
 	def _check_command(self):
 		try:
-			self.request, datasize = commands[self.msg]
+			self.request, datasize = command_dict[self.msg]
 			if len(self.data) != datasize:
 				raise ValueError
 			if (datasize == 8) and (not is_valid_hex(self.data)):
