@@ -1,3 +1,7 @@
+# Resources #
+#############
+/Resources/*
+
 # Compiled source #
 ###################
 *.com
