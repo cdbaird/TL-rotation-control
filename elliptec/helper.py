@@ -4,7 +4,7 @@ import sys
 from .errcodes import error_codes
 
 
-# Some helper functions for TLRot module
+# Some helper functions for elliptec module
 
 def find_ports():
 	avail_ports = []

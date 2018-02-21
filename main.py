@@ -44,8 +44,8 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.tapedrive.motor2.do_('forward')
 
 	def backward(self):
-		self.tapedrive.motor1.do_('backward')
 		self.tapedrive.motor2.do_('backward')
+		self.tapedrive.motor1.do_('backward')
 
 	def home(self):
 		self.tapedrive.motor1.do_('home')
