@@ -13,7 +13,7 @@ testcmds = [('0in', b'0IN081080004120170701016800040000\r\n'),	# OK
 			('0sj00007fff', b'0GS00\r\n'),						# cmd ERR (lowercase hex)
 			('0sj00007FFF', b'0GS00\r\n'),						# OK
 			('0gj', b'0GJ00008000\r\n'),						# OK
-			('0ma', b'')										# cmd ERR no data
+			('0ma', b''),										# cmd ERR no data
 			('0ma00040000', b'0GS0C\r\n'),						# rsp ERR out of range
 			('0mr', b''),										# cmd ERR no data
 			('0mr00040000', b'0PO00000000\r\n'),				# OK ?
