@@ -1,11 +1,11 @@
 <RCC>
   <qresource prefix="images">
+    <file>no-entry.png</file>
     <file>bw3.png</file>
     <file>fw3.png</file>
     <file>home2.png</file>
     <file>fw.png</file>
     <file>bw.png</file>
     <file>home.png</file>
-    <file>Chaosphere3DCG.png</file>
   </qresource>
 </RCC>

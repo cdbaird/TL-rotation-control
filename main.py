@@ -9,7 +9,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		super().__init__()
 		self.setupUi(self)
 		self.tapedrive = td.Tapedrive()
-		# Set default stepsize
+		 Set default stepsize
 		self.tapedrive.motor1.set_('stepsize', 
 			self.tapedrive.motor1.deg_to_hex(self.verticalSlider.value()))
 		self.tapedrive.motor2.set_('stepsize', 
@@ -22,10 +22,12 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.btnM2fw.clicked.connect(self.mot2_fw)
 		self.btnM1bw.clicked.connect(self.mot1_bw)
 		self.btnM1fw.clicked.connect(self.mot1_fw)
+		self.btnIsolate.clicked.connect(self.isolate)
 
 		self.verticalSlider.valueChanged.connect(self.on_slider_drag)
 		self.verticalSlider.sliderReleased.connect(self.on_slider_release)
 		self.homeEnable.toggled.connect(self.home_button_toggle)
+		self.isolateEnable.toggled.connect(self.isolate_button_toggle)
 
 	def mot2_bw(self):
 		self.tapedrive.motor2.do_('backward')
@@ -51,6 +53,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.tapedrive.motor1.do_('home')
 		self.tapedrive.motor2.do_('home')
 
+	def isolate(self):
+		self.tapedrive.motor1.set_('isolate', '01')
+		self.tapedrive.motor2.set_('isolate', '01')
 
 	def on_slider_drag(self):
 		val = self.verticalSlider.value()
@@ -68,6 +73,9 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 
 	def home_button_toggle(self):
 		self.btnHome.setEnabled(self.homeEnable.isChecked())
+
+	def isolate_button_toggle(self):
+		self.btnIsolate.setEnabled(self.isolateEnable.isChecked())
 		
 
 

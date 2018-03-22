@@ -8,6 +8,7 @@ get_ = {
 
 set_ = {
 	'stepsize' : b'sj'
+	'isolate'  : b'is'
 	}
 
 mov_ = {
