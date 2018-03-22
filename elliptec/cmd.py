@@ -7,7 +7,7 @@ get_ = {
 	}
 
 set_ = {
-	'stepsize' : b'sj'
+	'stepsize' : b'sj',
 	'isolate'  : b'is'
 	}
 

@@ -9,7 +9,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		super().__init__()
 		self.setupUi(self)
 		self.tapedrive = td.Tapedrive()
-		 Set default stepsize
+		# Set default stepsize
 		self.tapedrive.motor1.set_('stepsize', 
 			self.tapedrive.motor1.deg_to_hex(self.verticalSlider.value()))
 		self.tapedrive.motor2.set_('stepsize', 
