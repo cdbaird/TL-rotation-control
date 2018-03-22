@@ -27,7 +27,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.verticalSlider.valueChanged.connect(self.on_slider_drag)
 		self.verticalSlider.sliderReleased.connect(self.on_slider_release)
 		self.homeEnable.toggled.connect(self.home_button_toggle)
-		self.isolateEnable.toggled.connect(self.isolate_button_toggle)
+		self.IsolateEnable.toggled.connect(self.isolate_button_toggle)
 
 	def mot2_bw(self):
 		self.tapedrive.motor2.do_('backward')
