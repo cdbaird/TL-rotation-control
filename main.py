@@ -75,7 +75,7 @@ class mainProgram(QtWidgets.QMainWindow, Ui_TapeDriveWindow):
 		self.btnHome.setEnabled(self.homeEnable.isChecked())
 
 	def isolate_button_toggle(self):
-		self.btnIsolate.setEnabled(self.isolateEnable.isChecked())
+		self.btnIsolate.setEnabled(self.IsolateEnable.isChecked())
 		
 
 
